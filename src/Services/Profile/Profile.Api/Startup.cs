@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Reflection;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -8,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Polly;
 using Profile.Api.Config;
 using Profile.Api.DataAccess;
@@ -37,6 +40,15 @@ namespace Profile.Api
 			services.AddControllers(options =>
 			{
 				options.Filters.Add(typeof(ValidatorActionFilter));
+			});
+
+			services.AddSwaggerGen(c =>
+			{
+				c.SwaggerDoc("v1", new OpenApiInfo { Title = "Profiles API", Version = "v1" });
+				// Set the comments path for the Swagger JSON and UI.
+				var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+				var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+				c.IncludeXmlComments(xmlPath);
 			});
 
 			services.Configure<LocationConfig>(Configuration.GetSection(nameof(LocationConfig)));
@@ -92,6 +104,17 @@ namespace Profile.Api
 			{
 				app.UseDeveloperExceptionPage();
 			}
+
+			// Enable middleware to serve generated Swagger as a JSON endpoint.
+			app.UseSwagger();
+
+			// Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+			// specifying the Swagger JSON endpoint.
+			app.UseSwaggerUI(c =>
+			{
+				c.SwaggerEndpoint("/swagger/v1/swagger.json", "Profiles API");
+				c.RoutePrefix = string.Empty;
+			});
 
 			app.UseHttpsRedirection();
 			app.UseRouting();
