@@ -20,7 +20,6 @@ namespace Skills.Api.Controllers
 		private readonly SkillsContext _skillsContext;
 		private readonly ApiLimitsConfig _apiLimitsConfig;
 
-
 		public UserSkillsController(ILogger<UserSkillsController> logger, SkillsContext skillsContext, IOptions<ApiLimitsConfig> options)
 		{
 			_logger = logger;
@@ -44,7 +43,6 @@ namespace Skills.Api.Controllers
 
 			return user;
 		}
-
 
 		[HttpGet]
 		public async Task<ActionResult<PaginatedItems<UserSkills>>> GetUserSkils([FromBody]List<string> userList, string professionName, string skillLvlName, int pageSize = 10, int pageNumber = 0)
@@ -82,15 +80,6 @@ namespace Skills.Api.Controllers
 			return new PaginatedItems<UserSkills>(pageNumber, pageSize, userList.Count(), userListFound);
 		}
 
-		//get users with skills(users id [], profession, skilLvl)
-
-		//add profession
-		//add skill for profession
-		//delete profession
-		//updateProfession 
-		//get all professions with skill levels
-		//get all skills for a profession
-
 		[HttpPost]
 		[Route("{userId}")]
 		public async Task<ActionResult<UserSkills>> AddSkillsToUserProfile(string userId, string professionName, string skillLvlName)
@@ -126,7 +115,7 @@ namespace Skills.Api.Controllers
 					UserId = userId
 				};
 
-				 await _skillsContext.UserSkills.AddAsync(existingUser);
+				await _skillsContext.UserSkills.AddAsync(existingUser);
 			}
 
 			//check if user has the skill
@@ -182,8 +171,6 @@ namespace Skills.Api.Controllers
 			return await GetUserSkils(userId);
 		}
 
-
-
 		private async Task<bool> ValidateProfessionWithSkillLv(string professionName, string skillLvlName)
 		{
 			var exsitingProfession = await _skillsContext.Professions.FindAsync(professionName);
@@ -210,7 +197,7 @@ namespace Skills.Api.Controllers
 
 		private async Task PopulateWithData()
 		{
-			if(_skillsContext.Professions.Count() == 0)
+			if (_skillsContext.Professions.Count() == 0)
 			{
 				_skillsContext.Professions.AddRange(new List<Profession>()
 				{
@@ -259,8 +246,5 @@ namespace Skills.Api.Controllers
 			//end
 
 		}
-
-
-
 	}
 }

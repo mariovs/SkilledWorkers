@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Web.SkilledWorkers.HttpAggregator.Models;
+using Web.SkilledWorkers.HttpAggregator.Services;
 
 namespace Web.SkilledWorkers.HttpAggregator.Controllers
 {
@@ -16,23 +16,18 @@ namespace Web.SkilledWorkers.HttpAggregator.Controllers
 		};
 
 		private readonly ILogger<WeatherForecastController> _logger;
+		private readonly IProfileService _profileService;
 
-		public WeatherForecastController(ILogger<WeatherForecastController> logger)
+		public WeatherForecastController(ILogger<WeatherForecastController> logger, IProfileService profileService)
 		{
 			_logger = logger;
+			_profileService = profileService;
 		}
 
-		[HttpGet]
-		public IEnumerable<WeatherForecast> Get()
+		[HttpGet("{userId}")]
+		public async Task<ActionResult<UserProfileInfo>> Get(string userId)
 		{
-			var rng = new Random();
-			return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-			{
-				Date = DateTime.Now.AddDays(index),
-				TemperatureC = rng.Next(-20, 55),
-				Summary = Summaries[rng.Next(Summaries.Length)]
-			})
-			.ToArray();
+			return await _profileService.GetUserById(userId);
 		}
 	}
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace Profile.Api.Infrastructure
+namespace Skills.Api.Infrastructure
 {
 	public class ValidatorActionFilter : IActionFilter
 	{
