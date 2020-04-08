@@ -7,6 +7,8 @@ namespace Skills.Api.DataAccess
 	{
 		public SkillsContext(DbContextOptions options) : base(options) { }
 
+		public DbSet<UserSkills> UserSkills { get; set; }
+
 		public DbSet<Models.Skills> Skills { get; set; }
 
 		public DbSet<Profession> Professions { get; set; }

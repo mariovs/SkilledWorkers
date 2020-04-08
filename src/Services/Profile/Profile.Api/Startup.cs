@@ -33,25 +33,24 @@ namespace Profile.Api
 				options.UseSqlServer(Configuration.GetConnectionString("Default"));
 			});
 
-			services.Configure<LocationConfig>(Configuration.GetSection(nameof(LocationConfig)));
-
 			services.AddCors();
 			services.AddControllers(options =>
 			{
 				options.Filters.Add(typeof(ValidatorActionFilter));
 			});
 
+			services.Configure<LocationConfig>(Configuration.GetSection(nameof(LocationConfig)));
 			var locationConfig = Configuration.GetSection(nameof(LocationConfig)).Get<LocationConfig>();
 			services.AddHttpClient("googleMaps", c =>
-					{
-						c.BaseAddress = new Uri(locationConfig.ApiUrl);
-					})
-					.AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(new[]
-					{
-						TimeSpan.FromSeconds(1),
-						TimeSpan.FromSeconds(5),
-						TimeSpan.FromSeconds(10)
-					}));
+			{
+				c.BaseAddress = new Uri(locationConfig.ApiUrl);
+			})
+			.AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(new[]
+			{
+				TimeSpan.FromSeconds(1),
+				TimeSpan.FromSeconds(5),
+				TimeSpan.FromSeconds(10)
+			}));
 
 			services.AddAuthorization(options =>
 			{

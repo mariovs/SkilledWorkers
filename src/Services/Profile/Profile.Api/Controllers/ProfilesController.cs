@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Api.Support;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Profile.Api.DataAccess;
-using Profile.Api.Infrastructure;
 using Profile.Api.Location;
 using Profile.Api.Models;
 

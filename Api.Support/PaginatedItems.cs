@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Profile.Api.Infrastructure
+namespace Api.Support
 {
     public class PaginatedItems<TEntity> where TEntity : class
     {
