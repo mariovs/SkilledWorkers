@@ -12,6 +12,6 @@ namespace Web.SkilledWorkers.HttpAggregator.Services
 
 		Task<PaginatedItems<UserProfileInfo>> GetUserProfileInfoList(int pageNumber, int pageSize);
 
-		Task<PaginatedItems<UserProfileInfo>> GetUserProfileInfoList(string address, double radius);
+		Task<PaginatedItems<UserProfileInfo>> GetUserProfileInfoList(string address, double radius, int pageNumber = 0, int pageSize = 10);
 	}
 }

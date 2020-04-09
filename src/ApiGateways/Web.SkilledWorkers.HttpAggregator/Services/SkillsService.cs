@@ -1,5 +1,7 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Api.Support;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Web.SkilledWorkers.HttpAggregator.Config;
@@ -28,6 +30,18 @@ namespace Web.SkilledWorkers.HttpAggregator.Services
 		{
 			var url = $"{_servicesUrlsConfig.SkillsApi}{SkillsOperations.GetSkillsForUser(userId)}";
 			return await _httpServiceInteractor.Get<UserSkillsInfo>(url);
+		}
+
+		public async Task<UserSkillsInfo> GetUserWithSkills(string userId, string professionName, string skillLvlName)
+		{
+			var url = $"{_servicesUrlsConfig.SkillsApi}{SkillsOperations.GetSkillsForUser(userId, professionName, skillLvlName)}";
+			return await _httpServiceInteractor.Get<UserSkillsInfo>(url);
+		}
+
+		public async Task<PaginatedItems<UserSkillsInfo>> GetUsersSkills(List<string> userIdList, string professionName, string skillLvlName, int pageNumber, int pageSize)
+		{
+			var url =  SkillsOperations.GetSkillsForUserIds(_servicesUrlsConfig.SkillsApi, userIdList.ToArray(), professionName, skillLvlName, pageSize, pageNumber);
+			return await _httpServiceInteractor.Get<PaginatedItems<UserSkillsInfo>>(url);
 		}
 	}
 }

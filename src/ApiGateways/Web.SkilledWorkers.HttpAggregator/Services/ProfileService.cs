@@ -44,9 +44,10 @@ namespace Web.SkilledWorkers.HttpAggregator.Services
 			return await _httpServiceInteractor.Get<PaginatedItems<UserProfileInfo>>(url);
 		}
 
-		public Task<PaginatedItems<UserProfileInfo>> GetUserProfileInfoList(string address, double radius)
+		public async Task<PaginatedItems<UserProfileInfo>> GetUserProfileInfoList(string address, double radius, int pageNumber = 0, int pageSize = 10)
 		{
-			throw new System.NotImplementedException();
+			var url = $"{_servicesUrlsConfig.ProfilesApi}{ProfileOperations.GetProfiles(address, radius, pageSize, pageNumber)}";
+			return await _httpServiceInteractor.Get<PaginatedItems<UserProfileInfo>>(url);
 		}
 	}
 }

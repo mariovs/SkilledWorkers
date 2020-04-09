@@ -1,4 +1,7 @@
-﻿using System.Net;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Api.Support;
@@ -67,9 +70,52 @@ namespace Web.SkilledWorkers.HttpAggregator.Controllers
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet]
-		public async Task<ActionResult<PaginatedItems<UserProfileInfo>>> GetUserProfileInfoList(int pageNumber = 0, int pageSize = 10)
+		public async Task<ActionResult<PaginatedItems<UserProfileWithSkills>>> GetUserProfileInfoList(string address, double radius, string professionName, string skillLevel, int pageNumber = 0, int pageSize = 10)
 		{
-			return await _profileService.GetUserProfileInfoList(pageNumber, pageSize);
+			var usersProfileInfosList = await _profileService.GetUserProfileInfoList(address, radius, pageNumber, pageSize);
+			if(usersProfileInfosList.Count == 0)
+			{
+				return NotFound();
+			}
+
+			var usersIdList = usersProfileInfosList.Data.Select(x => x.UserId).ToList();
+
+			var usersWithSkills = new List<UserSkillsInfo>();
+			foreach(var userId in usersIdList)
+			{
+				try
+				{
+					var userSkillsInfo = await _skillsService.GetUserWithSkills(userId, professionName, skillLevel);
+					if(userSkillsInfo != null)
+					{
+						usersWithSkills.Add(userSkillsInfo);
+					}
+				}
+				catch (HttpExceptionWithStatusCode ex)
+				{
+					//if user doesn't have skills it's ok
+					if (ex.StatusCode != HttpStatusCode.NotFound)
+					{
+						throw;
+					}
+				}
+			}
+
+			var listFound = new List<UserProfileWithSkills>();
+			foreach(var skilledUser in usersWithSkills)
+			{
+				foreach(var userInfo in usersProfileInfosList.Data)
+				{
+					if(skilledUser.UserId == userInfo.UserId)
+					{
+						var updatedProfile = _mapper.Map<UserProfileWithSkills>(userInfo);
+						updatedProfile.Skills = skilledUser.Skills;
+						listFound.Add(updatedProfile);
+					}
+				}
+			}
+
+			return new PaginatedItems<UserProfileWithSkills>(pageNumber,pageSize, listFound.Count, listFound);
 		}
 
 		[HttpPost]

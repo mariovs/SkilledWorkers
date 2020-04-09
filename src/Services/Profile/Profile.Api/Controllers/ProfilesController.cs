@@ -157,24 +157,24 @@ namespace Profile.Api.Controllers
 
 		[HttpGet]
 		[Route("search")]
-		public async Task<ActionResult<PaginatedItems<Models.Profile>>> GetProfilesByAddress(string streetName, string city, double radius, int pageSize = 10, int pageNumber = 0)
+		public async Task<ActionResult<PaginatedItems<Models.Profile>>> GetProfilesByAddress(string address, double radius, int pageSize = 10, int pageNumber = 0)
 		{
 			if (pageSize > maxProfileResultsPerPage || pageNumber < 0 ||
-				string.IsNullOrWhiteSpace(streetName) || string.IsNullOrWhiteSpace(city))
+				string.IsNullOrWhiteSpace(address))
 			{
 				return BadRequest();
 			}
 
-			var baseAddressCoordinates = await _locationService.GetCoordinates($"{streetName} {city}");
+			var baseAddressCoordinates = await _locationService.GetCoordinates(address);
 			if (baseAddressCoordinates == null)
 			{
 				return BadRequest();
 			}
 
 			//todo: replace it with sql code to increase performance, entity framework doesn't know about Math library
-			//this will retrive all profiles from the city and will execute the search on the server
+			//this will retrieve all profiles from the city and will execute the search on the server
 			var searchQuery = _profileContext.Profiles
-									.Where(p => p.City == city)
+									//.Where(p => p.City == city) // city could be extracted from address and perform a little optimization
 									.Where(x => (12742 * Math.Asin(Math.Sqrt(Math.Sin(((Math.PI / 180) * (x.Lat - baseAddressCoordinates.Latitude)) / 2) * Math.Sin(((Math.PI / 180) * (x.Lat - baseAddressCoordinates.Latitude)) / 2) +
 										Math.Cos((Math.PI / 180) * baseAddressCoordinates.Latitude) * Math.Cos((Math.PI / 180) * (x.Lat)) *
 										Math.Sin(((Math.PI / 180) * (x.Long - baseAddressCoordinates.Longitude)) / 2) * Math.Sin(((Math.PI / 180) * (x.Long - baseAddressCoordinates.Longitude)) / 2)))) <= radius);

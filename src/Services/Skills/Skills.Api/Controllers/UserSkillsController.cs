@@ -30,6 +30,7 @@ namespace Skills.Api.Controllers
 		[HttpGet("{userId}")]
 		public async Task<ActionResult<UserSkills>> GetUserSkils(string userId)
 		{
+			
 			var user = await _skillsContext.UserSkills
 				.Include(u => u.Skills)
 				.ThenInclude(s => s.Profession)
@@ -44,8 +45,37 @@ namespace Skills.Api.Controllers
 			return user;
 		}
 
+		[HttpGet("{userId}/search")]
+		public async Task<ActionResult<UserSkills>> GetUserSkils(string userId, string professionName, string skillLevelName)
+		{
+			var isPorfessionAndSkillValid = await ValidateProfessionWithSkillLv(professionName, skillLevelName);
+			if (!isPorfessionAndSkillValid)
+			{
+				return BadRequest();
+			}
+
+			var user = await _skillsContext.UserSkills
+						.Include(u => u.Skills)
+						.ThenInclude(s => s.Profession)
+						.Include(u => u.Skills)
+						.ThenInclude(s => s.SkillLevel)
+						.SingleOrDefaultAsync(u => u.UserId == userId);
+			if (user == null)
+			{
+				return NotFound();
+			}
+
+			var skillFound = user.Skills.FirstOrDefault(s => s.Profession.Name == professionName && s.SkillLevel.Name == skillLevelName);
+			if(skillFound == null)
+			{
+				return NotFound();
+			}
+
+			return user;
+		}
+
 		[HttpGet]
-		public async Task<ActionResult<PaginatedItems<UserSkills>>> GetUserSkils([FromBody]List<string> userList, string professionName, string skillLvlName, int pageSize = 10, int pageNumber = 0)
+		public async Task<ActionResult<PaginatedItems<UserSkills>>> GetUserSkils(string[] userList, string professionName, string skillLvlName, int pageSize = 10, int pageNumber = 0)
 		{
 			if (pageSize > _apiLimitsConfig.MaxProfilesPerPage)
 			{
