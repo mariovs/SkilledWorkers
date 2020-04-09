@@ -13,7 +13,7 @@ html {
   }
 }
 
-.aling-right{
+.align-right{
   display: flex;
   justify-content: end;
 }

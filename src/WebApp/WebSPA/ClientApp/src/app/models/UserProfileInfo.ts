@@ -1,21 +1,22 @@
 export class  UserProfileInfo {
-    UserId: string;
 
-    FirstName: string;
+    userId: string;
 
-    LastName: string;
+    firstName: string;
 
-    StreetName: string;
+    lastName: string;
 
-    City: string;
+    streetName: string;
 
-    Country: string;
+    city: string;
 
-    State: string;
+    country: string;
 
-    ZipCode: string;
+    state: string;
 
-    Lat: number;
+    zipCode: string;
 
-    Long: number;
+    lat: number;
+
+    long: number;
 }

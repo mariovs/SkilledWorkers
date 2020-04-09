@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Api.Support;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace Web.SkilledWorkers.HttpAggregator.Infrastructure
@@ -12,17 +13,33 @@ namespace Web.SkilledWorkers.HttpAggregator.Infrastructure
 	public class HttpServicesInteraction
 	{
 		private readonly IHttpClientFactory _httpClientFactory;
+		private readonly ILogger _logger;
 
-		public HttpServicesInteraction(IHttpClientFactory httpClientFactory)
+		public HttpServicesInteraction(IHttpClientFactory httpClientFactory, ILogger logger)
 		{
 			_httpClientFactory = httpClientFactory;
+			_logger = logger;
 		}
 
 		public async Task<T> Get<T>(string url) where T : class
 		{
+
 			T result = null;
 			var httpClient = _httpClientFactory.CreateClient(url);
 			var response = await httpClient.GetAsync(new Uri(url));
+
+			try
+			{
+				response.EnsureSuccessStatusCode();
+			}
+			catch (HttpRequestException e)
+			{
+				if(response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+				{
+					_logger.LogError(e, $"Error occur when performing a get at the url {url} . Request message is {response.RequestMessage}");
+				}
+				throw new HttpExceptionWithStatusCode(e, response.StatusCode);
+			}
 
 			await response.Content.ReadAsStringAsync().ContinueWith((Task<string> x) =>
 			{

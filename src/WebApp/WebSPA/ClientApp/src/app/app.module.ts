@@ -13,7 +13,12 @@ import { ProfileComponent } from './profile/profile.component';
 import { AuthGuard } from './auth.guard';
 import { SkilledWrokersService } from './services/skilled-wrokers/skilled-wrokers.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatToolbarModule} from '@angular/material/toolbar';
+// import {MatToolbarModule} from '@angular/material/toolbar';
+import { CreateProfileComponent } from './create-profile/create-profile.component';
+import { UpdateProfileComponent } from './update-profile/update-profile.component';
+import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/google-maps-autocomplete';
+import { AgmCoreModule } from '@agm/core';
+
 
 import {
   MatCardModule,
@@ -21,10 +26,11 @@ import {
   MatButtonModule,
   MatFormFieldModule,
   MatGridListModule,
-  MatSliderModule
+  MatSliderModule,
+  MatToolbarModule,
+  MatBottomSheetModule,
+  MatDividerModule,
 } from '@angular/material';
-import { CreateProfileComponent } from './create-profile/create-profile.component';
-import { UpdateProfileComponent } from './update-profile/update-profile.component';
 
 const materialModules = [
   MatCardModule,
@@ -33,7 +39,10 @@ const materialModules = [
   MatFormFieldModule,
   MatGridListModule,
   MatSliderModule,
-  MatToolbarModule
+  MatToolbarModule,
+  AgmCoreModule,
+  MatDividerModule,
+  MatBottomSheetModule
 ];
 
 
@@ -61,6 +70,11 @@ const materialModules = [
       { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthGuard]},
       { path: 'home', component: HomeComponent, canActivate: [AuthGuard]}
     ]),
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyB0mdGGBW56PqDxYMQJzycRdH7xvbSWT58  ',
+      libraries: ['places']
+    }),
+    MatGoogleMapsAutocompleteModule,
     BrowserAnimationsModule
   ],
   providers: [SkilledWrokersService],

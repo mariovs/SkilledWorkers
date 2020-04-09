@@ -7,7 +7,7 @@ a {
 
 code {
   color: #e01a76;
-}
+} 
 
 .btn-primary {
   color: #fff;
@@ -20,5 +20,5 @@ html, body {
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .container{
-  margin-top: 24px;;
+  margin-top: 24px;
 }

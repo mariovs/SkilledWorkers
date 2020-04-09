@@ -1,23 +1,59 @@
-  .example-form {
-    min-width: 150px;
-    max-width: 500px;
-    width: 100%;
-    margin-top: 24px;
-  }
+.example-form {
+  min-width: 150px;
+  width: 100%;
+  margin-top: 24px;
+}
 
-  .card-form {
+.card-form {
+  min-width: 150px;
+  max-width: 600px;
+  width: 100%;
+  margin-top: 24px;
+  color: primary;
+}
+
+.card-form-data-saved{
     min-width: 150px;
-    max-width: 500px;
+    max-width: 600px;
     width: 100%;
     margin-top: 24px;
-    color:primary;
-  }
-  
-  .example-full-width {
+    background: green;
+    color: white;
+    text-align: center;
+}
+
+.card-form-data-error{
+    min-width: 150px;
+    max-width: 600px;
     width: 100%;
-  }
-  
-  td {
-    padding-right: 8px;
-  }
-  
+    margin-top: 24px;
+    background: red;
+    color: white;
+    text-align: center;
+}
+
+mat-card-title,
+mat-card-content mat-card-actions {
+  display: flex;
+  justify-content: center;
+}
+.example-full-width {
+  width: 100%;
+}
+
+td {
+  padding-right: 8px;
+}
+
+.center-button {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.button {
+  position: relative;
+  background: #673ab7;
+  color: white;
+  min-width: 128px;
+}

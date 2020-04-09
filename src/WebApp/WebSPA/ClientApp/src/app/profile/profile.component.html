@@ -1,72 +1,91 @@
-<mat-card color=" " class="example-form" >Welcome! Start by creating your profile.</mat-card>
-<form class="example-form">
-
-  <mat-form-field class="example-full-width">
-    <mat-label>Company (disabled)</mat-label>
-    <input matInput disabled value="Google">
-  </mat-form-field>
-
-  <table class="example-full-width" cellspacing="0">
-    <tr>
-      <td>
+<mat-card class="card-form">
+  <mat-card-title>
+      <div  *ngIf="!userExists">
+        Welcome! Start creating your profile.
+      </div>
+      <div *ngIf="userExists">
+        Profile information
+      </div>
+  </mat-card-title>
+  <mat-card-content>
+    <form class="example-form">
+      <table class="example-full-width" cellspacing="0">
+        <tr>
+          <td>
+            <mat-form-field class="example-full-width">
+              <mat-label>First name</mat-label>
+              <input matInput [(ngModel)]="userProfile.firstName" name="firstName">
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="example-full-width">
+              <mat-label>Last name</mat-label>
+              <input matInput [(ngModel)]="userProfile.lastName" name="lastName">
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+      <mat-divider [vertical]="true"></mat-divider>
+      <p>
         <mat-form-field class="example-full-width">
-          <mat-label>First name</mat-label>
-          <input matInput>
+          <mat-label>Search for address </mat-label>
+          <input matInput matGoogleMapsAutocomplete (onAutocompleteSelected)="onAutocompleteSelected($event)"
+            (onLocationSelected)="onLocationSelected($event)">
         </mat-form-field>
-      </td>
-      <td>
+      </p>
+      <mat-divider [vertical]="true"></mat-divider>
+      <p>
         <mat-form-field class="example-full-width">
-          <mat-label>Long Last Name That Will Be Truncated</mat-label>
-          <input matInput>
+          <mat-label>Street Name</mat-label>
+          <input matInput [(ngModel)]="userProfile.streetName" name="StreetName">
         </mat-form-field>
-      </td>
-    </tr>
-  </table>
-
-  <p>
-    <mat-form-field class="example-full-width">
-      <mat-label>Address</mat-label>
-      <textarea matInput placeholder="Ex. 100 Main St">1600 Amphitheatre Pkwy</textarea>
-    </mat-form-field>
-    <mat-form-field class="example-full-width">
-      <mat-label>Address 2</mat-label>
-      <textarea matInput></textarea>
-    </mat-form-field>
-  </p>
-
-  <table class="example-full-width" cellspacing="0">
-    <tr>
-      <td>
+      </p>
+      <p>
         <mat-form-field class="example-full-width">
-          <mat-label>City</mat-label>
-          <input matInput placeholder="Ex. San Francisco">
+          <mat-label>Country</mat-label>
+          <input matInput placeholder="Ex. USA" [(ngModel)]="userProfile.country" name="Country">
         </mat-form-field>
-      </td>
-      <td>
-        <mat-form-field class="example-full-width">
-          <mat-label>State</mat-label>
-          <input matInput placeholder="Ex. California">
-        </mat-form-field>
-      </td>
-      <td>
-        <mat-form-field class="example-full-width">
-          <mat-label>Postal Code</mat-label>
-          <input matInput #postalCode maxlength="5" placeholder="Ex. 94105" value="94043">
-          <mat-hint align="end">{{postalCode.value.length}} / 5</mat-hint>
-        </mat-form-field>
-      </td>
-    </tr>
-  </table>
-</form>
+      </p>
+      <table class="example-full-width" cellspacing="0">
+        <tr>
+          <td>
+            <mat-form-field class="example-full-width">
+              <mat-label>City</mat-label>
+              <input matInput placeholder="Ex. San Francisco"[(ngModel)]="userProfile.city" name="City">
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="example-full-width">
+              <mat-label>State</mat-label>
+              <input matInput placeholder="Ex. California" [(ngModel)]="userProfile.state" name="State">
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="example-full-width">
+              <mat-label>Postal Code</mat-label>
+              <input matInput #postalCode maxlength="10" placeholder="Ex. 94105" [(ngModel)]="userProfile.zipCode" name="ZipCode" value="{{userProfile.zipCode}}">
+              <mat-hint align="end">{{postalCode.value.length}} / 10</mat-hint>
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <div class="center-button" *ngIf="!userExists">
+      <button class="button" mat-button (click)="CreateUser()">Create profile</button>
+    </div>
+    <div class="center-button" *ngIf="userExists">
+      <button class="button" mat-button (click)="UpdateUser()">Update profile</button>
+    </div>
+  </mat-card-actions>
+</mat-card>
+<mat-card class="card-form-data-saved" *ngIf="dataSaved" >
+  Data saved
+</mat-card>
+<mat-card class="card-form-data-saved" *ngIf="dataError" >
+  An error occurred. Data is not saved
+</mat-card>
 
 
-<pre *ngIf="auth.userProfile$ | async as profile">
-<div>
-  <p>User name is {{profile.name}}</p>
-  <p>User name is {{token}}</p>
-</div>
-<code>{{ userProfile | json }}</code>
-<p>user exists {{ userExists }}</p>
-<button (click)="GetToken()">GetToken</button>
 
-</pre>

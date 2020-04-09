@@ -21,7 +21,7 @@ namespace Web.SkilledWorkers.HttpAggregator.Services
 			_logger = logger;
 			_clientFactory = clientFactory;
 			_servicesUrlsConfig = servicesUrlsConfig.Value;
-			_httpServiceInteractor = new HttpServicesInteraction(_clientFactory);
+			_httpServiceInteractor = new HttpServicesInteraction(_clientFactory, logger);
 		}
 
 		public async Task<UserSkillsInfo> GetUserSkills(string userId)

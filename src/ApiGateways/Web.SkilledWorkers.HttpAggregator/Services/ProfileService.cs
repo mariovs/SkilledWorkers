@@ -22,7 +22,7 @@ namespace Web.SkilledWorkers.HttpAggregator.Services
 			_clientFactory = clientFactory;
 			_servicesUrlsConfig = servicesUrlsConfig.Value;
 			_logger = logger;
-			_httpServiceInteractor = new HttpServicesInteraction(_clientFactory);
+			_httpServiceInteractor = new HttpServicesInteraction(_clientFactory, logger);
 		}
 
 		public async Task<UserProfileInfo> CreateUser(UserProfileInfoRequest userProfileRequest)

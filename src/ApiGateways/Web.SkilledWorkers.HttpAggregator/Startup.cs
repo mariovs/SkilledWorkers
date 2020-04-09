@@ -30,6 +30,7 @@ namespace Web.SkilledWorkers.HttpAggregator
 			services.AddControllers(options =>
 			{
 				options.Filters.Add(typeof(ValidatorActionFilter));
+				options.Filters.Add(new ServicesExceptionFilter());
 			});
 
 			services.Configure<ServicesUrlsConfig>(Configuration.GetSection(nameof(ServicesUrlsConfig)));

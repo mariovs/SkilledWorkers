@@ -14,9 +14,9 @@ export class AuthService {
     createAuth0Client({
       domain: "dev-ujfz2lay.eu.auth0.com",
       client_id: "Qu82e3RjlaVWa5SqrIyRHSqW6duTKH5M",
-      responseType: 'id_token',
+      responseType: 'token id_token',
       redirect_uri: `${window.location.origin}`,
-      scope: 'openid profile read:timesheets create:timesheets'
+      scope: 'openid profile read:current_user'
     })
   ) as Observable<Auth0Client>).pipe(
     shareReplay(1), // Every subscription receives the same shared value
