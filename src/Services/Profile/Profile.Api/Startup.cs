@@ -31,10 +31,23 @@ namespace Profile.Api
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddDbContext<ProfileContext>(options =>
+			var dbInMemory = Configuration.GetValue<bool>("InMemmoryDb");
+			if (dbInMemory)
 			{
-				options.UseSqlServer(Configuration.GetConnectionString("Default"));
-			});
+				services.AddDbContext<ProfileContext>(options =>
+				{
+					options.UseInMemoryDatabase(databaseName: "in-memory");
+				});
+			}
+			else
+			{
+				services.AddDbContext<ProfileContext>(options =>
+				{
+
+					options.UseSqlServer(Configuration.GetConnectionString("Default"));
+				});
+			}
+
 
 			services.AddCors();
 			services.AddControllers(options =>
@@ -98,12 +111,16 @@ namespace Profile.Api
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
 		{
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
 			}
+
+			//insert test data in db
+			var context = (ProfileContext)serviceProvider.GetService(typeof(ProfileContext));
+			SeedDb.InsertFakeData(context);
 
 			// Enable middleware to serve generated Swagger as a JSON endpoint.
 			app.UseSwagger();

@@ -23,7 +23,6 @@ export class ProfileComponent implements OnInit {
   dataError = false;
 
 
-
   public appearance = Appearance;
   public zoom: number;
   public latitude: number;

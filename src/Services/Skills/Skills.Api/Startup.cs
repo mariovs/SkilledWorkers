@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Skills.Api.Config;
 using Skills.Api.DataAccess;
+using Skills.Api.Ifrastructure;
 using Skills.Api.Infrastructure;
 
 namespace Skills.Api
@@ -31,10 +32,22 @@ namespace Skills.Api
 				options.Filters.Add(typeof(ValidatorActionFilter));
 			});
 
-			services.AddDbContext<SkillsContext>(options =>
+			var dbInMemory = Configuration.GetValue<bool>("InMemmoryDb");
+			if (dbInMemory)
 			{
-				options.UseSqlServer(Configuration.GetConnectionString("Default"));
-			});
+				services.AddDbContext<SkillsContext>(options =>
+				{
+					options.UseInMemoryDatabase(databaseName: "in-memory");
+				});
+			}
+			else
+			{
+				services.AddDbContext<SkillsContext>(options =>
+				{
+
+					options.UseSqlServer(Configuration.GetConnectionString("Default"));
+				});
+			}
 
 			// Register the Swagger generator, defining 1 or more Swagger documents
 			services.AddSwaggerGen(c =>
@@ -51,12 +64,15 @@ namespace Skills.Api
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
 		{
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
 			}
+			//insert test data in db
+			var context = (SkillsContext)serviceProvider.GetService(typeof(SkillsContext));
+			SeedData.PopulateWithData(context);
 
 			app.UseHttpsRedirection();
 

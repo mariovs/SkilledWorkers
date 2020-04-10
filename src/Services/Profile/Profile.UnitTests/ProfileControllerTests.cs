@@ -30,6 +30,7 @@ namespace Profile.UnitTests
 			var config = new MapperConfiguration(opts =>
 			{
 				opts.AddProfile<MappingProfile>();
+				
 			});
 			_mapper = config.CreateMapper();
 			using (var dbContext = new ProfileContext(_dbOptions))
@@ -75,9 +76,9 @@ namespace Profile.UnitTests
 		{
 			var profilesController = SetupProfilesController();
 
-			var actionResultSFProfiles = await profilesController.GetProfilesByAddress("Union Street", "San Francisco", 2);
-			var actionResultZurichProfilesShortDistance = await profilesController.GetProfilesByAddress("Bahnhofstrasse", "Zurich", 1);
-			var actionResultZurichProfilesLongDistance = await profilesController.GetProfilesByAddress("Bahnhofstrasse", "Zurich", int.MaxValue);
+			var actionResultSFProfiles = await profilesController.GetProfilesByAddress("Union Street", 2);
+			var actionResultZurichProfilesShortDistance = await profilesController.GetProfilesByAddress("Bahnhofstrasse", 1);
+			var actionResultZurichProfilesLongDistance = await profilesController.GetProfilesByAddress("Bahnhofstrasse", int.MaxValue);
 
 			Assert.Equal(2, actionResultSFProfiles.Value.Count);
 			Assert.Equal(1, actionResultZurichProfilesShortDistance.Value.Count);

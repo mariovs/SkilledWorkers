@@ -225,56 +225,6 @@ namespace Skills.Api.Controllers
 			return true;
 		}
 
-		private async Task PopulateWithData()
-		{
-			if (_skillsContext.Professions.Count() == 0)
-			{
-				_skillsContext.Professions.AddRange(new List<Profession>()
-				{
-					new Profession()
-					{
-						Name = "Chef",
-						Description = "Ratatouile"
-					},
-					new Profession()
-					{
-						Name = "Bartender",
-						Description = "Drinking problem"
-					},
-					new Profession()
-					{
-						Name = "Driver",
-						Description = "F1 or limo, just easy"
-					}
-				});
-				await _skillsContext.SaveChangesAsync();
-			}
-
-			if (_skillsContext.SkillLevels.Count() == 0)
-			{
-				_skillsContext.SkillLevels.AddRange(new List<SkillLevel>()
-				{
-					new SkillLevel()
-					{
-						Name = "Junior",
-						Description = "Just a beginner"
-					},
-					new SkillLevel()
-					{
-						Name = "Medium",
-						Description = "Couple of years exp"
-					},
-					new SkillLevel()
-					{
-						Name = "Pro",
-						Description = "10 or more years"
-					}
-				});
-				await _skillsContext.SaveChangesAsync();
-			}
-
-			//end
-
-		}
+		
 	}
 }

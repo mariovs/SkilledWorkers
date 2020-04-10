@@ -16,6 +16,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import {MatToolbarModule} from '@angular/material/toolbar';
 import { CreateProfileComponent } from './create-profile/create-profile.component';
 import { UpdateProfileComponent } from './update-profile/update-profile.component';
+import { SearchComponent} from './search/search.component';
 import { MatGoogleMapsAutocompleteModule } from '@angular-material-extensions/google-maps-autocomplete';
 import { AgmCoreModule } from '@agm/core';
 
@@ -30,6 +31,8 @@ import {
   MatToolbarModule,
   MatBottomSheetModule,
   MatDividerModule,
+  MatSelectModule,
+  MatProgressSpinnerModule
 } from '@angular/material';
 
 const materialModules = [
@@ -42,7 +45,9 @@ const materialModules = [
   MatToolbarModule,
   AgmCoreModule,
   MatDividerModule,
-  MatBottomSheetModule
+  MatBottomSheetModule,
+  MatSelectModule,
+  MatProgressSpinnerModule
 ];
 
 
@@ -56,7 +61,8 @@ const materialModules = [
     ProfileComponent,
     LoginComponent,
     CreateProfileComponent,
-    UpdateProfileComponent
+    UpdateProfileComponent,
+    SearchComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -66,9 +72,11 @@ const materialModules = [
     RouterModule.forRoot([
       { path: 'login', component: LoginComponent, pathMatch: 'full' },
       { path: '', component: ProfileComponent, pathMatch: 'full', canActivate: [AuthGuard]},
+      { path: 'search', component: SearchComponent, canActivate: [AuthGuard]},
+      { path: 'seed', component: SearchComponent, canActivate: [AuthGuard]},
+      { path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
       { path: 'counter', component: CounterComponent, canActivate: [AuthGuard]},
-      { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthGuard]},
-      { path: 'home', component: HomeComponent, canActivate: [AuthGuard]}
+      { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthGuard]}
     ]),
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyB0mdGGBW56PqDxYMQJzycRdH7xvbSWT58  ',

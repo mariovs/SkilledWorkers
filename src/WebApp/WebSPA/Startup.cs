@@ -25,6 +25,7 @@ namespace WebSPA
 			{
 				configuration.RootPath = "ClientApp/dist";
 			});
+			services.AddCors();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +50,12 @@ namespace WebSPA
 			}
 
 			app.UseRouting();
+
+			// global cors policy
+			app.UseCors(x => x
+				.AllowAnyOrigin()
+				.AllowAnyMethod()
+				.AllowAnyHeader());
 
 			app.UseEndpoints(endpoints =>
 			{
